@@ -1,14 +1,12 @@
 import java.awt.*;
 import java.awt.event.*;
-import javax.swing.Timer;
-import java.util.List;
 import java.awt.image.BufferStrategy;
+import java.util.List;
 
 public class Screen {
     private final int width = 800;
     private final int height = 600;
     private final String name = "Jaikin";
-
     private Frame window;
     private Canvas canvas;
     private final Manager manager;
@@ -89,6 +87,7 @@ public class Screen {
     }
 
     private void addMouseListner(){
+        
         this.canvas.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e){
