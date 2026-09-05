@@ -5,11 +5,14 @@ public class Manager {
     private List<Point> allPoints;
     private List<Point> ChaikinPoints;
     private boolean isAnimating;
+    private int currentStep;
+    private final int maxSteps = 7;
 
     public Manager() {
         this.allPoints = new ArrayList<>();
         this.ChaikinPoints = new ArrayList<>();
         this.isAnimating = false;
+        this.currentStep = 0;
     }
 
     public List<Point> getAllPoints() {
@@ -39,6 +42,7 @@ public class Manager {
     public void removeAllPoints() {
         this.allPoints.clear();
         this.ChaikinPoints.clear();
+        this.currentStep = 0;
         this.isAnimating = false;
     }
 
@@ -49,7 +53,7 @@ public class Manager {
         if (allPoints.size() < 2) {
             return;
         }
-
+        this.currentStep = 0;
         this.ChaikinPoints = Algo.generatePoints(this.allPoints);
         this.isAnimating = true;
     }
@@ -58,10 +62,14 @@ public class Manager {
         if (!isAnimating) {
             return;
         }
+        if (currentStep >= maxSteps) {
+            this.ChaikinPoints = Algo.generatePoints(this.ChaikinPoints);
+            this.currentStep = 0;
+            return;
+        }
 
-        List<Point> newPoints = Algo.generatePoints(this.ChaikinPoints);
-
-        this.ChaikinPoints = newPoints;
+        this.ChaikinPoints = Algo.generatePoints(this.ChaikinPoints);
+        this.currentStep++;
     }
 
     public void printAllPoints() {

@@ -95,3 +95,11 @@ Canvas
 ```
 
 Each class should stay focused on its own responsibility.
+
+
+ audit
+Restart the program, set two control points by left-clicking on the canvas, and press Enter.
+Is only a straight line drawn between the two control points?
+Restart
+
+Does the animation complete 7 steps before restarting?
