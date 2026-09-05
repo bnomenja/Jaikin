@@ -7,8 +7,8 @@ public class Screen {
     private final int width = 800;
     private final int height = 600;
     private final String name = "Jaikin";
-    private Frame window;
-    private Canvas canvas;
+    private final Frame window;
+    private final Canvas canvas;
     private final Manager manager;
 
     public Screen(Manager manager) {
@@ -81,15 +81,12 @@ public class Screen {
             public void keyPressed(KeyEvent e){
 
                 switch (e.getKeyCode()) {
-                    case KeyEvent.VK_ESCAPE:
+                    case KeyEvent.VK_ESCAPE ->
                         System.exit(0);
-                        break;
-                    case KeyEvent.VK_ENTER:
+                    case KeyEvent.VK_ENTER ->
                         manager.startAnimation();
-                        break;
-                    case KeyEvent.VK_C:
+                    case KeyEvent.VK_C ->
                         manager.removeAllPoints();
-                        break;
                 }
             }
         });

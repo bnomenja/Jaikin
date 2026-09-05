@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Manager {
-    private List<Point> allPoints;
+    private final List<Point> allPoints;
     private List<Point> ChaikinPoints;
     private boolean isAnimating;
     private int currentStep;
@@ -94,23 +94,5 @@ public class Manager {
         }
 
         System.out.println();
-    }
-}
-
-class Point {
-    private int x;
-    private int y;
-
-    public Point(int x, int y) {
-        this.x = x;
-        this.y = y;
-    }
-
-    public int getX() {
-        return this.x;
-    }
-
-    public int getY() {
-        return this.y;
     }
 }
