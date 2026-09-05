@@ -23,6 +23,7 @@ public class Screen {
 
         addKeyListner();
         addMouseListner();
+        addWindowListener();
 
         this.window.setVisible(true);
         this.canvas.requestFocusInWindow();
@@ -64,6 +65,14 @@ public class Screen {
     private void drawLine(Graphics g,int x1, int y1, int x2, int y2){
         g.setColor(Color.WHITE);
         g.drawLine(x1, y1, x2, y2);
+    }
+    private void addWindowListener() {
+        this.window.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                System.exit(0);
+            }
+        });
     }
 
     private void addKeyListner(){
