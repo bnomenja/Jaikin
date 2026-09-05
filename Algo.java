@@ -16,10 +16,10 @@ public class Algo {
             Point p1 = allPoints.get(i);
             Point p2 = allPoints.get(i + 1);
 
-            int qX = (3 * p1.getX() + p2.getX()) / 4;
-            int qY = (3 * p1.getY() + p2.getY()) / 4;
-            int rX = (p1.getX() + 3 * p2.getX()) / 4;
-            int rY = (p1.getY() + 3 * p2.getY()) / 4;
+            double qX = (3 * p1.getX() + p2.getX()) / 4;
+            double qY = (3 * p1.getY() + p2.getY()) / 4;
+            double rX = (p1.getX() + 3 * p2.getX()) / 4;
+            double rY = (p1.getY() + 3 * p2.getY()) / 4;
 
             newPoints.add(new Point(qX, qY));
             newPoints.add(new Point(rX, rY));

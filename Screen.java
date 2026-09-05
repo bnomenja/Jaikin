@@ -4,8 +4,8 @@ import java.awt.image.BufferStrategy;
 import java.util.List;
 
 public class Screen {
-    private final int width = 800;
-    private final int height = 600;
+    private final int width = 1000;
+    private final int height = 800;
     private final String name = "Jaikin";
     private final Frame window;
     private final Canvas canvas;
@@ -14,6 +14,7 @@ public class Screen {
     public Screen(Manager manager) {
         Frame frame = new Frame(name);
         frame.setSize(width, height);
+        frame.setResizable(false);
 
         this.manager = manager;
         this.window = frame;
@@ -52,6 +53,10 @@ public class Screen {
             }
         }
 
+        g.setColor(Color.LIGHT_GRAY);
+        g.drawString(manager.getStatusMessage(), 12, 20);
+        g.drawString("C: clear    Esc: exit", 12, 40);
+
         g.dispose();
         bs.show();
     }
@@ -66,6 +71,7 @@ public class Screen {
         g.setColor(Color.WHITE);
         g.drawLine(x1, y1, x2, y2);
     }
+    
     private void addWindowListener() {
         this.window.addWindowListener(new WindowAdapter() {
             @Override
@@ -81,25 +87,31 @@ public class Screen {
             public void keyPressed(KeyEvent e){
 
                 switch (e.getKeyCode()) {
-                    case KeyEvent.VK_ESCAPE ->
+                    case KeyEvent.VK_ESCAPE :
                         System.exit(0);
-                    case KeyEvent.VK_ENTER ->
+                        break;
+                    case KeyEvent.VK_ENTER :
                         manager.startAnimation();
-                    case KeyEvent.VK_C ->
+                        break;
+                    case KeyEvent.VK_C :
                         manager.removeAllPoints();
+                        break;
                 }
             }
         });
     }
 
     private void addMouseListner(){
-        
         this.canvas.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e){
+            public void mousePressed(MouseEvent e){
+
+                if (e.getButton() != MouseEvent.BUTTON1) {
+                    return;
+                }
+
                 int x = e.getX();
                 int y = e.getY();
-
                 manager.addPoint(x, y);
             }
         });
