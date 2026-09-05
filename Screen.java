@@ -18,7 +18,7 @@ public class Screen {
         this.manager = manager;
         this.window = frame;
         this.canvas = new Canvas();
-    
+        this.canvas.setFocusable(true);
         this.window.add(this.canvas);
 
         addKeyListner();
@@ -40,17 +40,24 @@ public class Screen {
         g.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
         for (Point p : manager.getAllPoints()) {
-            drawCircle(g, (int) p.getX(), (int) p.getY());
+            drawCircle(g, p.getX(), p.getY());
         }
 
-        if (manager.isAnimating()) {
+        if (manager.shouldDrawCurve()) {
             List<Point> points = manager.getChakinPoints();
+            if (points.isEmpty() && manager.getAllPoints().size() == 2) {
+                points = manager.getAllPoints();
+            }
             for (int i = 0; i < points.size() - 1; i++){
                 Point p1 = points.get(i);
                 Point p2 = points.get(i + 1);
-                drawLine(g, (int) p1.getX(), (int) p1.getY(), (int) p2.getX(), (int) p2.getY());
+                drawLine(g, p1.getX(), p1.getY(), p2.getX(), p2.getY());
             }
         }
+
+        g.setColor(Color.LIGHT_GRAY);
+        g.drawString(manager.getStatusMessage(), 12, 20);
+        g.drawString("C: clear    Esc: exit", 12, 40);
 
         g.dispose();
         bs.show();
@@ -81,12 +88,17 @@ public class Screen {
             public void keyPressed(KeyEvent e){
 
                 switch (e.getKeyCode()) {
-                    case KeyEvent.VK_ESCAPE ->
+                    case KeyEvent.VK_ESCAPE:
                         System.exit(0);
-                    case KeyEvent.VK_ENTER ->
+                        break;
+                    case KeyEvent.VK_ENTER:
                         manager.startAnimation();
-                    case KeyEvent.VK_C ->
+                        break;
+                    case KeyEvent.VK_C:
                         manager.removeAllPoints();
+                        break;
+                    default:
+                        break;
                 }
             }
         });
@@ -97,10 +109,14 @@ public class Screen {
         this.canvas.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e){
+                if (e.getButton() != MouseEvent.BUTTON1) {
+                    return;
+                }
                 int x = e.getX();
                 int y = e.getY();
 
                 manager.addPoint(x, y);
+                canvas.requestFocusInWindow();
             }
         });
     }

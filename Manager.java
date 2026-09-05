@@ -7,12 +7,14 @@ public class Manager {
     private boolean isAnimating;
     private int currentStep;
     private final int maxSteps = 7;
+    private String statusMessage;
 
     public Manager() {
         this.allPoints = new ArrayList<>();
         this.ChaikinPoints = new ArrayList<>();
         this.isAnimating = false;
         this.currentStep = 0;
+        this.statusMessage = "Left-click to add control points. Press Enter to animate.";
     }
 
     public List<Point> getAllPoints() {
@@ -27,8 +29,12 @@ public class Manager {
         return this.isAnimating;
     }
 
-    public void setAnimationState(boolean state) {
-        this.isAnimating = state;
+    public boolean shouldDrawCurve() {
+        return this.isAnimating || this.allPoints.size() == 2;
+    }
+
+    public String getStatusMessage() {
+        return this.statusMessage;
     }
 
     public void addPoint(int x, int y) {
@@ -37,6 +43,9 @@ public class Manager {
         }
         Point p = new Point(x, y);
         this.allPoints.add(p);
+        this.ChaikinPoints.clear();
+        this.currentStep = 0;
+        this.statusMessage = "Control points: " + this.allPoints.size();
     }
 
     public void removeAllPoints() {
@@ -44,18 +53,27 @@ public class Manager {
         this.ChaikinPoints.clear();
         this.currentStep = 0;
         this.isAnimating = false;
+        this.statusMessage = "Canvas cleared. Left-click to add control points.";
     }
 
     public void startAnimation() {
-        if (this.isAnimating) {
+        if (allPoints.isEmpty()) {
+            this.statusMessage = "Add at least one control point before pressing Enter.";
             return;
         }
-        if (allPoints.size() < 2) {
+        if (allPoints.size() == 1) {
+            this.statusMessage = "One control point: no curve can be generated.";
+            return;
+        }
+        if (allPoints.size() == 2) {
+            this.ChaikinPoints = copyPoints(this.allPoints);
+            this.statusMessage = "Two control points: displaying a straight line.";
             return;
         }
         this.currentStep = 0;
-        this.ChaikinPoints = Algo.generatePoints(this.allPoints);
+        this.ChaikinPoints = copyPoints(this.allPoints);
         this.isAnimating = true;
+        this.statusMessage = "Chaikin step 0 of " + maxSteps;
     }
 
     public void nextStep() {
@@ -63,13 +81,23 @@ public class Manager {
             return;
         }
         if (currentStep >= maxSteps) {
-            this.ChaikinPoints = Algo.generatePoints(this.ChaikinPoints);
+            this.ChaikinPoints = copyPoints(this.allPoints);
             this.currentStep = 0;
+            this.statusMessage = "Chaikin step 0 of " + maxSteps;
             return;
         }
 
         this.ChaikinPoints = Algo.generatePoints(this.ChaikinPoints);
         this.currentStep++;
+        this.statusMessage = "Chaikin step " + currentStep + " of " + maxSteps;
+    }
+
+    private List<Point> copyPoints(List<Point> points) {
+        List<Point> copy = new ArrayList<>();
+        for (Point point : points) {
+            copy.add(new Point(point.getX(), point.getY()));
+        }
+        return copy;
     }
 
     public void printAllPoints() {
